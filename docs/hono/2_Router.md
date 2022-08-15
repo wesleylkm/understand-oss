@@ -43,7 +43,7 @@ params: method, path, handler
 
 ## How Trie begin build? (Split to other md)
 
-> Assume we have only the root node, and no pattern like **:id**
+> Assume we have only the simple path, and no pattern like **:id**
 
 1. When we do `app.get("abc/def", handler)`. It will construct a trie like this
    ![buildTrie](./images/build_trie.png "build Trie")
@@ -71,3 +71,22 @@ const pattern2 = getPattern("/user/:name{[a-zA-z]}");
 // pattern --> [:id, id, true]
 // pattern2 --> [:name, name, RegExp]
 ```
+
+## Find/Match Route
+
+```ts
+this.router.match(method, path);
+```
+
+`match` function call `node.search` internally. (Remember handler all are stored inside a **Trie Structure**).
+
+> Using DFS?
+
+1. split the path using [splitPath](./4_utils.md)
+2. Look for children that match either **path** or **\*** or **Regexp** inside node's pattern array.
+3. get handler by following this sequence
+   `exact path --> pattern
+4. If matched pattern, we can store the path that match regex into the **params** dictionary.
+5. Get handler from the node. (Using getHandlerSet refer to [Here](./4_utils.md))
+6. Store the handlers by score. Lower = Higher priority (ascending)
+7. return **handlers & params**. (Array and Dict)

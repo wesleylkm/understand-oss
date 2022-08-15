@@ -3,7 +3,8 @@
 ### getPathFromURL
 
 1. find index of symbol `?`.
-2. get url substring(8, url.length or queryIndex)
+2. get url substring after domain name and ignore search query.
+   `url.substring(url.indexOf("/",8), url or length before "?")`
 
 > 8 can get thing after the first 2 slash (**/** for both http & https case).
 
